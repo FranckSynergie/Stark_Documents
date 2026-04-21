@@ -24,7 +24,7 @@
     * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
     body { background:var(--black); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; display:flex; flex-direction:column; }
 
-    /* HEADER */
+    /* ── HEADER ── */
     header {
       background: var(--dark);
       border-bottom: 2px solid var(--red);
@@ -47,21 +47,102 @@
     .header-text { flex: 1; }
     .header-text h1 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; line-height:1; color:#fff; }
     .header-text p  { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-top:1px; }
-    .user-badge {
-      display: flex; align-items: center; gap: 8px;
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 20px; padding: 5px 12px 5px 8px;
+    .model-pill {
+      display: flex; align-items: center; gap: 6px;
+      background: rgba(232,21,10,.15); border: 1px solid rgba(232,21,10,.4);
+      border-radius: 20px; padding: 4px 10px 4px 8px;
+      cursor: pointer;
     }
-    .user-dot { width:7px; height:7px; background:var(--red); border-radius:50%; }
+    .model-pill-dot { width:6px; height:6px; background:var(--red); border-radius:50%; }
+    .model-pill-name { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:1px; color:var(--red); font-weight:600; }
+    .user-badge {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 10px 5px 8px;
+    }
+    .user-dot { width:7px; height:7px; background:#4caf50; border-radius:50%; }
     .user-name { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:1px; color:var(--muted); }
     .btn-logout {
       background: none; border: none;
       color: var(--muted); font-size: 20px;
-      cursor: pointer; padding: 4px 6px;
-      line-height: 1;
+      cursor: pointer; padding: 4px 6px; line-height: 1;
     }
 
-    /* SEARCH */
+    /* ── MODEL SELECTOR OVERLAY ── */
+    #modelOverlay {
+      position: fixed; inset: 0; z-index: 100;
+      background: var(--black);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 24px;
+      animation: fadeIn .3s ease;
+    }
+    #modelOverlay.hidden { display: none; }
+    @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+
+    .model-brand {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .model-bolt {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 64px; height: 64px;
+      background: var(--red);
+      clip-path: polygon(12% 0%, 88% 0%, 100% 12%, 100% 88%, 88% 100%, 12% 100%, 0% 88%, 0% 12%);
+      margin-bottom: 16px;
+      box-shadow: 0 0 50px rgba(232,21,10,.35);
+    }
+    .model-bolt svg { width: 32px; height: 32px; fill: white; }
+    .model-brand h1 {
+      font-family:'Bebas Neue',sans-serif; font-size:42px;
+      letter-spacing:5px; color:#fff; line-height:1;
+    }
+    .model-brand p {
+      font-family:'Barlow Condensed',sans-serif; font-size:13px;
+      letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-top:6px;
+    }
+
+    .model-label {
+      font-family:'Barlow Condensed',sans-serif; font-size:11px;
+      letter-spacing:2.5px; text-transform:uppercase; color:var(--muted);
+      margin-bottom:20px; text-align:center;
+    }
+
+    .model-grid {
+      width: 100%; max-width: 400px;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .model-btn {
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 22px 16px;
+      cursor: pointer;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      transition: border-color .15s, background .15s, transform .1s;
+      text-align: center;
+    }
+    .model-btn:active { transform: scale(.97); }
+    .model-btn:hover { border-color: var(--red); background: var(--hit); }
+
+    .model-btn-tag {
+      font-family:'Bebas Neue',sans-serif; font-size:28px;
+      letter-spacing:2px; color:#fff; line-height:1;
+    }
+    .model-btn-sub {
+      font-family:'Barlow Condensed',sans-serif; font-size:10px;
+      letter-spacing:1.5px; text-transform:uppercase; color:var(--muted);
+    }
+    .model-btn-badge {
+      background: var(--red); border-radius:4px;
+      padding: 2px 8px;
+      font-family:'Barlow Condensed',sans-serif; font-size:10px;
+      letter-spacing:1px; color:#fff; text-transform:uppercase;
+    }
+
+    /* ── SEARCH ── */
     .search-section { padding: 18px 16px 10px; }
     .search-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:9px; }
     .search-wrap { display:flex; gap:8px; align-items:stretch; }
@@ -75,7 +156,7 @@
     #searchInput::placeholder { color:#555; }
     #clearBtn { display:none; background:var(--border); border:none; border-radius:6px; padding:0 14px; color:var(--muted); font-size:18px; cursor:pointer; }
 
-    /* RESULT */
+    /* ── RESULT ── */
     #resultBox { margin:10px 16px 4px; display:none; }
     .result-card {
       background:var(--hit); border:1.5px solid var(--red);
@@ -104,7 +185,7 @@
     .no-result p { color:var(--muted); font-size:14px; }
     .no-result strong { color:var(--red); }
 
-    /* CHIPS */
+    /* ── CHIPS ── */
     .section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:14px 16px 8px; }
     .chips-wrap { padding:0 16px 10px; display:flex; flex-wrap:wrap; gap:8px; }
     .chip {
@@ -116,7 +197,7 @@
     }
     .chip:active, .chip.active { background:var(--red); border-color:var(--red); color:#fff; }
 
-    /* DOCS LIST */
+    /* ── DOCS LIST ── */
     .links-grid { padding:0 16px 40px; display:flex; flex-direction:column; gap:6px; }
     .cat-group { margin-bottom:4px; }
     .cat-label { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:6px; padding-left:2px; }
@@ -145,13 +226,58 @@
 </head>
 <body>
 
+<!-- ══════════════════════════════════════════════
+     MODEL SELECTOR OVERLAY
+══════════════════════════════════════════════ -->
+<div id="modelOverlay">
+  <div class="model-brand">
+    <div class="model-bolt">
+      <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    </div>
+    <h1>STARK VARG</h1>
+    <p>Documentation &amp; Support</p>
+  </div>
+
+  <div class="model-label">Sélectionne ta version</div>
+
+  <div class="model-grid">
+    <div class="model-btn" onclick="selectModel('MX 1.0','MX 1.0')">
+      <div class="model-btn-tag">MX 1.0</div>
+      <div class="model-btn-sub">Motocross</div>
+      <div class="model-btn-badge">Original</div>
+    </div>
+    <div class="model-btn" onclick="selectModel('MX 1.2','MX 1.2')">
+      <div class="model-btn-tag">MX 1.2</div>
+      <div class="model-btn-sub">Motocross</div>
+      <div class="model-btn-badge">Gen 2</div>
+    </div>
+    <div class="model-btn" onclick="selectModel('EX','EX')">
+      <div class="model-btn-tag">EX</div>
+      <div class="model-btn-sub">Enduro</div>
+      <div class="model-btn-badge">Enduro</div>
+    </div>
+    <div class="model-btn" onclick="selectModel('SIM','SIM')">
+      <div class="model-btn-tag">SIM</div>
+      <div class="model-btn-sub">Supermoto</div>
+      <div class="model-btn-badge">SM</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MAIN APP
+══════════════════════════════════════════════ -->
 <header>
   <div class="logo-badge">
     <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
   </div>
   <div class="header-text">
-    <h1>STARK VARG EX</h1>
-    <p>Documentation</p>
+    <h1 id="headerTitle">STARK VARG</h1>
+    <p id="headerSub">Documentation</p>
+  </div>
+  <div class="model-pill" onclick="changeModel()" title="Changer de modèle">
+    <div class="model-pill-dot"></div>
+    <span class="model-pill-name" id="modelPillName">—</span>
   </div>
   <div class="user-badge">
     <div class="user-dot"></div>
@@ -163,7 +289,7 @@
 <div class="search-section">
   <div class="search-label">🔍 Rechercher un sujet</div>
   <div class="search-wrap">
-    <input type="search" id="searchInput" placeholder="ex: suspension, chaîne, batterie…" autocomplete="off" autocorrect="off" spellcheck="false">
+    <input type="search" id="searchInput" placeholder="ex: suspension, frein, batterie, huile…" autocomplete="off" autocorrect="off" spellcheck="false">
     <button id="clearBtn" onclick="clearSearch()">✕</button>
   </div>
 </div>
@@ -171,18 +297,7 @@
 <div id="resultBox"></div>
 
 <div class="section-title">Accès rapide</div>
-<div class="chips-wrap">
-  <span class="chip" onclick="quickSearch('suspension')">Suspension</span>
-  <span class="chip" onclick="quickSearch('chaîne')">Chaîne</span>
-  <span class="chip" onclick="quickSearch('batterie')">Batterie</span>
-  <span class="chip" onclick="quickSearch('manuel')">Manuel EX</span>
-  <span class="chip" onclick="quickSearch('troubleshoot')">Dépannage</span>
-  <span class="chip" onclick="quickSearch('assemblage')">Assemblage</span>
-  <span class="chip" onclick="quickSearch('pièces')">Pièces</span>
-  <span class="chip" onclick="quickSearch('faq')">FAQ</span>
-  <span class="chip" onclick="quickSearch('app')">App VARG</span>
-  <span class="chip" onclick="quickSearch('contact')">Contact</span>
-</div>
+<div class="chips-wrap" id="chipsWrap"></div>
 
 <div class="section-title" id="allDocsTitle">Tous les documents</div>
 <div class="links-grid" id="allLinks"></div>
@@ -190,277 +305,415 @@
 <footer>STARK FUTURE — starkfuture.com</footer>
 
 <script>
-  // ── GUARD SESSION ──────────────────────────────
-  const raw = sessionStorage.getItem('stark_user');
-  if (!raw) { window.location.href = 'index.html'; }
-  else {
-    const user = JSON.parse(raw);
-    document.getElementById('userName').textContent = user.name.split(' ')[0].toUpperCase();
-  }
+// ── SESSION GUARD ──────────────────────────────────────────────────────────
+const raw = sessionStorage.getItem('stark_user');
+if (!raw) { window.location.href = 'index.html'; }
+const user = JSON.parse(raw || '{}');
+document.getElementById('userName').textContent = (user.name||'').split(' ')[0].toUpperCase();
 
-  function logout() {
-    sessionStorage.removeItem('stark_user');
-    window.location.href = 'index.html';
-  }
+function logout() {
+  sessionStorage.removeItem('stark_user');
+  window.location.href = 'index.html';
+}
 
-  // ── DOCS DATABASE ──────────────────────────────
-  const docs = [
-    {
-      id:'manuel-ex', cat:'Manuel',
-      title:'Manuel Propriétaire VARG EX',
-      desc:'Manuel complet du Stark VARG EX (PDF officiel 2025)',
-      tags:['manuel','owner','manual','propriétaire','guide','ex','varg ex','notice'],
-      links:[{ name:'Manuel EX — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark+VARG+EX+Owners+Manual+ENG+2025-02.pdf' }]
-    },
-    {
-      id:'manuel-mx12', cat:'Manuel',
-      title:'Manuel Propriétaire VARG MX 1.2',
-      desc:'Manuel complet du Stark VARG MX 1.2 (PDF officiel 2025)',
-      tags:['manuel mx','mx 1.2','mx1.2','motocross manual','mx manual'],
-      links:[{ name:'Manuel MX 1.2 — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark_VARG_MX_1_2_Owners_Manual_ENG_2025-08_Rev_2.pdf' }]
-    },
-    {
-      id:'manuel-sm', cat:'Manuel',
-      title:'Manuel Propriétaire VARG SM',
-      desc:'Manuel complet du Stark VARG SM (PDF officiel 2025)',
-      tags:['manuel sm','sm manual','supermoto','varg sm'],
-      links:[{ name:'Manuel SM — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark+VARG+SM+Owners+Manual+ENG+2025-11.pdf' }]
-    },
-    {
-      id:'manuel-mx10', cat:'Manuel',
-      title:'Manuel Propriétaire VARG MX 1.0',
-      desc:'Manuel original du Stark VARG MX (version 1.0)',
-      tags:['manuel mx 1.0','mx 1.0','varg original'],
-      links:[{ name:'Manuel MX 1.0 — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/varg_owners_manual.pdf' }]
-    },
-    {
-      id:'assemblage', cat:'Assemblage',
-      title:'Instructions d\'assemblage VARG',
-      desc:'Page officielle : déballage, montage et mise en route pour tous les modèles',
-      tags:['assemblage','assembly','montage','unboxing','déballage','mise en route','setup','installation'],
-      links:[
-        { name:'Instructions assemblage', type:'Page web', icon:'web', url:'https://starkfuture.com/manuals/assembly-instructions' },
-        { name:'Vidéo unboxing EX', type:'YouTube', icon:'video', url:'https://www.youtube.com/watch?v=nBx43Dxl2og' }
-      ]
-    },
-    {
-      id:'suspension', cat:'Technique',
-      title:'Réglage Suspension',
-      desc:'Tutoriels et guides techniques de réglage (SAG, compression, détente, ressort)',
-      tags:['suspension','sag','fourche','amortisseur','réglage','fork','shock','damper','ressort','spring','détente','compression','rebound','clicker'],
-      links:[
-        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
-        { name:'Chaîne YouTube Stark', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial' }
-      ]
-    },
-    {
-      id:'chaine', cat:'Technique',
-      title:'Chaîne & Transmission',
-      desc:'Remplacement chaîne, réglage tension, pignons, couronne (520 pitch)',
-      tags:['chaîne','chain','pignon','couronne','sprocket','transmission','tension','remplacement','replace','520','couronne 49','couronne 51','pitch'],
-      links:[
-        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
-        { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' }
-      ]
-    },
-    {
-      id:'batterie', cat:'Électrique',
-      title:'Batterie & Chargement',
-      desc:'Informations sur la batterie, chargeur, cycles de charge et autonomie',
-      tags:['batterie','battery','chargeur','charger','charge','charging','autonomie','range','capacité','wh','cycle','led','indicator'],
-      links:[
-        { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
-        { name:'Dépannage — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Troubleshooting_FAQ_EN.pdf' }
-      ]
-    },
-    {
-      id:'depannage', cat:'Support',
-      title:'Dépannage & Troubleshooting',
-      desc:'Guide de résolution de pannes : LED, charge, démarrage, erreurs',
-      tags:['dépannage','troubleshoot','troubleshooting','panne','erreur','error','led','problème','problem','ne démarre pas','ne charge pas'],
-      links:[
-        { name:'Dépannage — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Troubleshooting_FAQ_EN.pdf' },
-        { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' }
-      ]
-    },
-    {
-      id:'led', cat:'Technique',
-      title:'LED & Interrupteur de commande',
-      desc:'Guide des voyants LED et du sélecteur de modes du guidon',
-      tags:['led','interrupteur','switch','control switch','voyant','mode','indicator','lumière','bouton'],
-      links:[
-        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
-        { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' }
-      ]
-    },
-    {
-      id:'app', cat:'App',
-      title:'Application VARG',
-      desc:'Connectivité Bluetooth, réglages, personnalisation et métriques via l\'app',
-      tags:['app','application','bluetooth','phone','téléphone','connexion','connect','mapping','puissance','power','réglages app','settings'],
-      links:[
-        { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' },
-        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
-      ]
-    },
-    {
-      id:'pieces', cat:'Pièces',
-      title:'Pièces & Accessoires',
-      desc:'Boutique officielle pièces détachées et accessoires Stark Future',
-      tags:['pièces','parts','accessoires','accessories','spare','détachées','achat','shop','boutique','commande'],
-      links:[{ name:'Pièces & Accessoires', type:'Page web', icon:'web', url:'https://starkfuture.com/parts-and-accessories/spare-parts' }]
-    },
-    {
-      id:'faq', cat:'Support',
-      title:'FAQ — Questions fréquentes',
-      desc:'Toutes les réponses aux questions les plus posées sur le VARG',
-      tags:['faq','questions','réponses','aide','help','sam','chatbot','livraison','garantie','warranty'],
-      links:[
-        { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
-        { name:'SAM — Chatbot Stark', type:'Page web', icon:'web', url:'https://starkfuture.com/sam' }
-      ]
-    },
-    {
-      id:'contact', cat:'Support',
-      title:'Contact Support',
-      desc:'Contacter l\'équipe support Stark Future par email ou WhatsApp',
-      tags:['contact','support','email','whatsapp','aide','service','sav'],
-      links:[
-        { name:'Contact Stark Future', type:'Page web', icon:'web', url:'https://starkfuture.com/contact' },
-        { name:'WhatsApp Support', type:'WhatsApp', icon:'web', url:'https://api.whatsapp.com/send?phone=17173842982' }
-      ]
-    },
-    {
-      id:'entretien', cat:'Entretien',
-      title:'Entretien & Maintenance',
-      desc:'Nettoyage, maintenance périodique et service du VARG',
-      tags:['entretien','maintenance','service','nettoyage','cleaning','lavage','wash','révision','graisse','lube'],
-      links:[
-        { name:'FAQ — Entretien', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
-        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
-      ]
-    }
-  ];
+// ── MODEL SELECTION ────────────────────────────────────────────────────────
+let currentModel = sessionStorage.getItem('stark_model') || null;
 
-  const icons = {
-    pdf:   `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM9 13h6v1H9v-1zm0 3h4v1H9v-1zm0-6h2v1H9v-1z"/></svg>`,
-    web:   `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 17.9A8 8 0 0 1 4.1 13H7a14.6 14.6 0 0 0 4 6.9zM4.1 11A8 8 0 0 1 11 4.1V7a14.6 14.6 0 0 0-4 4H4.1zM13 4.1A8 8 0 0 1 19.9 11H17a14.6 14.6 0 0 0-4-4V4.1zm0 15.8V17a14.6 14.6 0 0 0 4-6h2.9A8 8 0 0 1 13 19.9z"/></svg>`,
-    video: `<svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c-.21-.8-.83-1.43-1.63-1.63C18.37 5 12 5 12 5s-6.37 0-7.93.54c-.8.2-1.42.83-1.63 1.63A28.2 28.2 0 0 0 2 12a28.2 28.2 0 0 0 .44 4.83c.21.8.83 1.42 1.63 1.63C5.63 19 12 19 12 19s6.37 0 7.93-.54c.8-.21 1.42-.83 1.63-1.63A28.2 28.2 0 0 0 22 12a28.2 28.2 0 0 0-.44-4.83z"/></svg>`
-  };
-
-  function normalize(s) {
-    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/['']/g,"'");
-  }
-
-  function search(q) {
-    if (!q || q.trim().length < 2) return null;
-    const words = normalize(q.trim()).split(/\s+/);
-    let best = null, bestScore = 0;
-    for (const doc of docs) {
-      let score = 0;
-      const allTags = doc.tags.map(normalize);
-      const titleN = normalize(doc.title);
-      for (const w of words) {
-        if (titleN.includes(w)) score += 3;
-        for (const t of allTags) {
-          if (t === w) score += 4;
-          else if (t.includes(w) || w.includes(t)) score += 2;
-        }
-      }
-      if (score > bestScore) { bestScore = score; best = doc; }
-    }
-    return bestScore > 0 ? best : null;
-  }
-
-  function renderResult(doc) {
-    const box = document.getElementById('resultBox');
-    if (!doc) {
-      box.style.display = 'block';
-      box.innerHTML = `<div class="no-result"><p>Aucun résultat pour <strong>"${document.getElementById('searchInput').value}"</strong><br><br>Essayez : suspension, chaîne, batterie, manuel, dépannage…</p></div>`;
-      return;
-    }
-    const linksHtml = doc.links.map(l => `
-      <a class="result-link" href="${l.url}" target="_blank" rel="noopener">
-        <div class="link-icon">${icons[l.icon]||icons.web}</div>
-        <div class="link-meta">
-          <span class="link-name">${l.name}</span>
-          <span class="link-type">${l.type}</span>
-        </div>
-      </a>`).join('');
-    box.style.display = 'block';
-    box.innerHTML = `
-      <div class="result-card">
-        <div class="result-cat">${doc.cat}</div>
-        <div class="result-title">${doc.title}</div>
-        <div class="result-desc">${doc.desc}</div>
-        <div class="result-links">${linksHtml}</div>
-      </div>`;
-  }
-
-  function clearSearch() {
-    document.getElementById('searchInput').value = '';
-    document.getElementById('resultBox').style.display = 'none';
-    document.getElementById('clearBtn').style.display = 'none';
-    document.getElementById('allDocsTitle').style.display = 'block';
-    document.getElementById('allLinks').style.display = 'flex';
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    document.getElementById('searchInput').focus();
-  }
-
-  function quickSearch(kw) {
-    document.getElementById('searchInput').value = kw;
-    document.querySelectorAll('.chip').forEach(c => {
-      c.classList.toggle('active', normalize(c.textContent).includes(normalize(kw)) || normalize(kw).includes(normalize(c.textContent)));
-    });
-    doSearch(kw);
-  }
-
-  function doSearch(query) {
-    const clearBtn = document.getElementById('clearBtn');
-    const allDocsTitle = document.getElementById('allDocsTitle');
-    const allLinks = document.getElementById('allLinks');
-    if (!query || query.trim().length < 2) {
-      document.getElementById('resultBox').style.display = 'none';
-      clearBtn.style.display = 'none';
-      allDocsTitle.style.display = 'block';
-      allLinks.style.display = 'flex';
-      return;
-    }
-    clearBtn.style.display = 'flex';
-    allDocsTitle.style.display = 'none';
-    allLinks.style.display = 'none';
-    renderResult(search(query));
-  }
-
-  document.getElementById('searchInput').addEventListener('input', function() {
-    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
-    doSearch(this.value);
-  });
-
-  // RENDER ALL DOCS
-  function renderAllDocs() {
-    const cats = {};
-    for (const doc of docs) { if(!cats[doc.cat]) cats[doc.cat]=[]; cats[doc.cat].push(doc); }
-    let html = '';
-    for (const [cat, items] of Object.entries(cats)) {
-      html += `<div class="cat-group"><div class="cat-label">${cat}</div>`;
-      for (const doc of items) {
-        const fl = doc.links[0];
-        html += `<a class="doc-row" href="${fl.url}" target="_blank" rel="noopener">
-          <div class="doc-icon ${fl.icon}">${icons[fl.icon]||icons.web}</div>
-          <div class="doc-info">
-            <div class="doc-name">${doc.title}</div>
-            <div class="doc-sub">${doc.links.length > 1 ? doc.links.length+' liens' : fl.type}</div>
-          </div>
-          <span class="arrow-icon">›</span>
-        </a>`;
-      }
-      html += '</div>';
-    }
-    document.getElementById('allLinks').innerHTML = html;
-  }
-
+function selectModel(modelKey, label) {
+  currentModel = modelKey;
+  sessionStorage.setItem('stark_model', modelKey);
+  document.getElementById('modelOverlay').classList.add('hidden');
+  document.getElementById('headerTitle').textContent = 'STARK VARG ' + label;
+  document.getElementById('headerSub').textContent = 'Documentation — ' + label;
+  document.getElementById('modelPillName').textContent = label;
+  renderChips();
   renderAllDocs();
+}
+
+function changeModel() {
+  document.getElementById('modelOverlay').classList.remove('hidden');
+  document.getElementById('searchInput').value = '';
+  document.getElementById('resultBox').style.display = 'none';
+  document.getElementById('clearBtn').style.display = 'none';
+  document.getElementById('allDocsTitle').style.display = 'block';
+  document.getElementById('allLinks').style.display = 'flex';
+}
+
+// Restore model if already set
+if (currentModel) {
+  selectModel(currentModel, currentModel);
+}
+
+// ── DOCS DATABASE ──────────────────────────────────────────────────────────
+// models: [] = tous, ['EX'] = seulement EX, etc.
+const allDocs = [
+
+  // ── MANUELS ───────────────────────────────────────────────────────────────
+  {
+    id:'manuel-ex', cat:'Manuel', models:['EX'],
+    title:'Manuel Propriétaire VARG EX',
+    desc:'Manuel complet du Stark VARG EX (PDF officiel 2025)',
+    tags:['manuel','owner','manual','propriétaire','guide','ex','varg ex','notice','pdf','document'],
+    links:[{ name:'Manuel EX — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark+VARG+EX+Owners+Manual+ENG+2025-02.pdf' }]
+  },
+  {
+    id:'manuel-mx12', cat:'Manuel', models:['MX 1.2'],
+    title:'Manuel Propriétaire VARG MX 1.2',
+    desc:'Manuel complet du Stark VARG MX 1.2 (PDF officiel 2025)',
+    tags:['manuel','mx 1.2','mx1.2','motocross','manual','guide','propriétaire','notice','pdf'],
+    links:[{ name:'Manuel MX 1.2 — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark_VARG_MX_1_2_Owners_Manual_ENG_2025-08_Rev_2.pdf' }]
+  },
+  {
+    id:'manuel-sm', cat:'Manuel', models:['SIM'],
+    title:'Manuel Propriétaire VARG SM / SIM',
+    desc:'Manuel complet du Stark VARG SM (PDF officiel 2025)',
+    tags:['manuel','sm','sim','supermoto','varg sm','manual','guide','propriétaire','notice','pdf'],
+    links:[{ name:'Manuel SM — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark+VARG+SM+Owners+Manual+ENG+2025-11.pdf' }]
+  },
+  {
+    id:'manuel-mx10', cat:'Manuel', models:['MX 1.0'],
+    title:'Manuel Propriétaire VARG MX 1.0',
+    desc:'Manuel original du Stark VARG MX (version 1.0)',
+    tags:['manuel','mx 1.0','mx1.0','varg original','manual','guide','propriétaire','notice','pdf'],
+    links:[{ name:'Manuel MX 1.0 — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/varg_owners_manual.pdf' }]
+  },
+
+  // ── ASSEMBLAGE ────────────────────────────────────────────────────────────
+  {
+    id:'assemblage', cat:'Assemblage', models:[],
+    title:'Instructions d\'assemblage VARG',
+    desc:'Page officielle : déballage, montage et mise en route pour tous les modèles',
+    tags:['assemblage','assembly','montage','unboxing','déballage','mise en route','setup','installation'],
+    links:[
+      { name:'Instructions assemblage', type:'Page web', icon:'web', url:'https://starkfuture.com/manuals/assembly-instructions' },
+      { name:'Vidéo unboxing EX', type:'YouTube', icon:'video', url:'https://www.youtube.com/watch?v=nBx43Dxl2og' }
+    ]
+  },
+
+  // ── SUSPENSION ────────────────────────────────────────────────────────────
+  {
+    id:'suspension', cat:'Technique', models:[],
+    title:'Réglage Suspension',
+    desc:'Tutoriels et guides de réglage SAG, compression, détente, ressort',
+    tags:['suspension','sag','fourche','amortisseur','réglage','fork','shock','damper','ressort','spring','détente','compression','rebound','clicker','réglages'],
+    links:[
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+      { name:'Chaîne YouTube Stark', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial' }
+    ]
+  },
+
+  // ── ROUES / FREINS ────────────────────────────────────────────────────────
+  {
+    id:'roue', cat:'Technique', models:[],
+    title:'Roues & Pneus',
+    desc:'Remplacement roue avant/arrière, pneu, rayons, jante',
+    tags:['roue','roues','wheel','pneu','tyre','tire','rayon','jante','rim','avant','arrière','remplacement','replace','montage','démontage'],
+    links:[
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+      { name:'Vidéos Stark YouTube', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial' }
+    ]
+  },
+  {
+    id:'frein', cat:'Technique', models:[],
+    title:'Freins & Plaquettes',
+    desc:'Remplacement plaquettes, disques, purge liquide de frein',
+    tags:['frein','freins','brake','plaquette','disque','disc','pad','purge','liquide de frein','brake fluid','saignée','bleeding','avant','arrière','remplacement'],
+    links:[
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+      { name:'Pièces & Accessoires', type:'Page web', icon:'web', url:'https://starkfuture.com/parts-and-accessories/spare-parts' }
+    ]
+  },
+
+  // ── PLASTIQUES / CARROSSERIE ──────────────────────────────────────────────
+  {
+    id:'plastiques', cat:'Carrosserie', models:[],
+    title:'Plastiques & Carrosserie',
+    desc:'Remplacement plastiques, garde-boue, protections, kit graphique, collants',
+    tags:['plastique','plastiques','plastic','garde-boue','fender','carrosserie','body','protection','kit graphique','graphics','sticker','collant','décalque','decal','habillage','remplacement'],
+    links:[
+      { name:'Pièces & Accessoires', type:'Page web', icon:'web', url:'https://starkfuture.com/parts-and-accessories/spare-parts' },
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
+    ]
+  },
+
+  // ── CHAÎNE & TRANSMISSION ─────────────────────────────────────────────────
+  {
+    id:'chaine', cat:'Technique', models:[],
+    title:'Chaîne & Transmission',
+    desc:'Remplacement chaîne, réglage tension, pignons, couronne (520 pitch)',
+    tags:['chaîne','chain','pignon','couronne','sprocket','transmission','tension','remplacement','replace','520','couronne 49','couronne 51','pitch'],
+    links:[
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+      { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' }
+    ]
+  },
+
+  // ── HUILE / LIQUIDES ──────────────────────────────────────────────────────
+  {
+    id:'huile', cat:'Entretien', models:[],
+    title:'Huile & Liquides',
+    desc:'Huile de fourche, liquide de refroidissement, graisse, lubrifiants',
+    tags:['huile','oil','liquide','liquid','refroidissement','cooling','coolant','fourche','fork oil','graisse','grease','lubrifiant','lube','vidange','remplacement','nivosus','fluide'],
+    links:[
+      { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
+    ]
+  },
+
+  // ── BATTERIE & PILE ───────────────────────────────────────────────────────
+  {
+    id:'batterie', cat:'Électrique', models:[],
+    title:'Batterie & Chargement',
+    desc:'Batterie principale, chargeur, cycles de charge, autonomie et remplacement pile télécommande',
+    tags:['batterie','battery','chargeur','charger','charge','charging','autonomie','range','capacité','wh','cycle','led','indicator','pile','piles','cell','télécommande','remote'],
+    links:[
+      { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+      { name:'Dépannage — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Troubleshooting_FAQ_EN.pdf' }
+    ]
+  },
+
+  // ── DÉPANNAGE ─────────────────────────────────────────────────────────────
+  {
+    id:'depannage', cat:'Support', models:[],
+    title:'Dépannage & Troubleshooting',
+    desc:'Guide résolution pannes : LED, charge, démarrage, erreurs',
+    tags:['dépannage','troubleshoot','troubleshooting','panne','erreur','error','led','problème','problem','ne démarre pas','ne charge pas','réinitialisation','reset'],
+    links:[
+      { name:'Dépannage — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Troubleshooting_FAQ_EN.pdf' },
+      { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' }
+    ]
+  },
+
+  // ── LED & COMMANDES ───────────────────────────────────────────────────────
+  {
+    id:'led', cat:'Technique', models:[],
+    title:'LED & Interrupteur de commande',
+    desc:'Guide des voyants LED et du sélecteur de modes du guidon',
+    tags:['led','interrupteur','switch','control switch','voyant','mode','indicator','lumière','bouton','guidon','commande'],
+    links:[
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+      { name:'Vidéos Stark YouTube', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial' }
+    ]
+  },
+
+  // ── APPLICATION ───────────────────────────────────────────────────────────
+  {
+    id:'app', cat:'App', models:[],
+    title:'Application VARG',
+    desc:'Bluetooth, réglages, personnalisation et métriques via l\'app',
+    tags:['app','application','bluetooth','phone','téléphone','connexion','connect','mapping','puissance','power','réglages app','settings'],
+    links:[
+      { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' },
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
+    ]
+  },
+
+  // ── PIÈCES ────────────────────────────────────────────────────────────────
+  {
+    id:'pieces', cat:'Pièces', models:[],
+    title:'Pièces & Accessoires',
+    desc:'Boutique officielle pièces détachées et accessoires Stark Future',
+    tags:['pièces','parts','accessoires','accessories','spare','détachées','achat','shop','boutique','commande','remplacement'],
+    links:[{ name:'Pièces & Accessoires', type:'Page web', icon:'web', url:'https://starkfuture.com/parts-and-accessories/spare-parts' }]
+  },
+
+  // ── FAQ ───────────────────────────────────────────────────────────────────
+  {
+    id:'faq', cat:'Support', models:[],
+    title:'FAQ — Questions fréquentes',
+    desc:'Toutes les réponses aux questions les plus posées sur le VARG',
+    tags:['faq','questions','réponses','aide','help','sam','chatbot','livraison','garantie','warranty'],
+    links:[
+      { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+      { name:'SAM — Chatbot Stark', type:'Page web', icon:'web', url:'https://starkfuture.com/sam' }
+    ]
+  },
+
+  // ── CONTACT ───────────────────────────────────────────────────────────────
+  {
+    id:'contact', cat:'Support', models:[],
+    title:'Contact Support',
+    desc:'Contacter l\'équipe support Stark Future par email ou WhatsApp',
+    tags:['contact','support','email','whatsapp','aide','service','sav'],
+    links:[
+      { name:'Contact Stark Future', type:'Page web', icon:'web', url:'https://starkfuture.com/contact' },
+      { name:'WhatsApp Support', type:'WhatsApp', icon:'web', url:'https://api.whatsapp.com/send?phone=17173842982' }
+    ]
+  },
+
+  // ── ENTRETIEN ─────────────────────────────────────────────────────────────
+  {
+    id:'entretien', cat:'Entretien', models:[],
+    title:'Entretien & Maintenance',
+    desc:'Nettoyage, maintenance périodique et service du VARG',
+    tags:['entretien','maintenance','service','nettoyage','cleaning','lavage','wash','révision','graisse','lube','remplacement','périodique'],
+    links:[
+      { name:'FAQ — Entretien', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+      { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
+    ]
+  },
+
+  // ── VIDÉOS YOUTUBE ────────────────────────────────────────────────────────
+  {
+    id:'youtube', cat:'Vidéos', models:[],
+    title:'Chaîne YouTube Officielle',
+    desc:'Toutes les vidéos officielles Stark Future : tutoriels, mise à jour, tips',
+    tags:['youtube','vidéo','video','chaîne','tutoriel','tutorial','officiel','official','stark youtube','how to','tuto','démonstration'],
+    links:[
+      { name:'Chaîne YouTube Stark', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial' },
+      { name:'Playlist Tutoriels', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial/videos' }
+    ]
+  }
+];
+
+// ── CHIPS par modèle ──────────────────────────────────────────────────────
+const chipsByModel = {
+  'MX 1.0': ['Suspension','Chaîne','Batterie','Manuel','Dépannage','Roue','Frein','Entretien','Pièces','FAQ'],
+  'MX 1.2': ['Suspension','Chaîne','Batterie','Manuel','Dépannage','Roue','Frein','Entretien','Pièces','FAQ'],
+  'EX':     ['Suspension','Chaîne','Batterie','Manuel EX','Dépannage','Roue','Frein','Huile','Plastiques','FAQ'],
+  'SIM':    ['Suspension','Batterie','Manuel','Dépannage','Roue','Frein','Plastiques','Entretien','Pièces','FAQ'],
+};
+const chipKeys = {
+  'Suspension':'suspension','Chaîne':'chaîne','Batterie':'batterie',
+  'Manuel':'manuel','Manuel EX':'manuel ex','Dépannage':'dépannage',
+  'Roue':'roue','Frein':'frein','Entretien':'entretien',
+  'Pièces':'pièces','FAQ':'faq','Huile':'huile','Plastiques':'plastique',
+};
+
+function renderChips() {
+  const list = chipsByModel[currentModel] || Object.keys(chipKeys);
+  const wrap = document.getElementById('chipsWrap');
+  wrap.innerHTML = list.map(label =>
+    `<span class="chip" onclick="quickSearch('${chipKeys[label]||label.toLowerCase()}')">${label}</span>`
+  ).join('');
+}
+
+// ── FILTRAGE DOCS PAR MODÈLE ──────────────────────────────────────────────
+function getDocsForModel(model) {
+  return allDocs.filter(d => d.models.length === 0 || d.models.includes(model));
+}
+
+// ── ICÔNES ────────────────────────────────────────────────────────────────
+const icons = {
+  pdf:   `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM9 13h6v1H9v-1zm0 3h4v1H9v-1zm0-6h2v1H9v-1z"/></svg>`,
+  web:   `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 17.9A8 8 0 0 1 4.1 13H7a14.6 14.6 0 0 0 4 6.9zM4.1 11A8 8 0 0 1 11 4.1V7a14.6 14.6 0 0 0-4 4H4.1zM13 4.1A8 8 0 0 1 19.9 11H17a14.6 14.6 0 0 0-4-4V4.1zm0 15.8V17a14.6 14.6 0 0 0 4-6h2.9A8 8 0 0 1 13 19.9z"/></svg>`,
+  video: `<svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c-.21-.8-.83-1.43-1.63-1.63C18.37 5 12 5 12 5s-6.37 0-7.93.54c-.8.2-1.42.83-1.63 1.63A28.2 28.2 0 0 0 2 12a28.2 28.2 0 0 0 .44 4.83c.21.8.83 1.42 1.63 1.63C5.63 19 12 19 12 19s6.37 0 7.93-.54c.8-.21 1.42-.83 1.63-1.63A28.2 28.2 0 0 0 22 12a28.2 28.2 0 0 0-.44-4.83z"/></svg>`
+};
+
+// ── SEARCH ────────────────────────────────────────────────────────────────
+function normalize(s) {
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/['']/g,"'");
+}
+
+function search(q) {
+  if (!q || q.trim().length < 2) return null;
+  const docs = getDocsForModel(currentModel);
+  const words = normalize(q.trim()).split(/\s+/);
+  let best = null, bestScore = 0;
+  for (const doc of docs) {
+    let score = 0;
+    const allTags = doc.tags.map(normalize);
+    const titleN = normalize(doc.title);
+    for (const w of words) {
+      if (titleN.includes(w)) score += 3;
+      for (const t of allTags) {
+        if (t === w) score += 4;
+        else if (t.includes(w) || w.includes(t)) score += 2;
+      }
+    }
+    if (score > bestScore) { bestScore = score; best = doc; }
+  }
+  return bestScore > 0 ? best : null;
+}
+
+function renderResult(doc) {
+  const box = document.getElementById('resultBox');
+  if (!doc) {
+    box.style.display = 'block';
+    box.innerHTML = `<div class="no-result"><p>Aucun résultat pour <strong>"${document.getElementById('searchInput').value}"</strong><br><br>Essayez : suspension, frein, roue, batterie, huile, plastique…</p></div>`;
+    return;
+  }
+  const linksHtml = doc.links.map(l => `
+    <a class="result-link" href="${l.url}" target="_blank" rel="noopener">
+      <div class="link-icon">${icons[l.icon]||icons.web}</div>
+      <div class="link-meta">
+        <span class="link-name">${l.name}</span>
+        <span class="link-type">${l.type}</span>
+      </div>
+    </a>`).join('');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <div class="result-card">
+      <div class="result-cat">${doc.cat}</div>
+      <div class="result-title">${doc.title}</div>
+      <div class="result-desc">${doc.desc}</div>
+      <div class="result-links">${linksHtml}</div>
+    </div>`;
+}
+
+function clearSearch() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('resultBox').style.display = 'none';
+  document.getElementById('clearBtn').style.display = 'none';
+  document.getElementById('allDocsTitle').style.display = 'block';
+  document.getElementById('allLinks').style.display = 'flex';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  document.getElementById('searchInput').focus();
+}
+
+function quickSearch(kw) {
+  document.getElementById('searchInput').value = kw;
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.toggle('active', normalize(c.textContent).includes(normalize(kw)) || normalize(kw).includes(normalize(c.textContent)));
+  });
+  doSearch(kw);
+}
+
+function doSearch(query) {
+  const clearBtn = document.getElementById('clearBtn');
+  const allDocsTitle = document.getElementById('allDocsTitle');
+  const allLinks = document.getElementById('allLinks');
+  if (!query || query.trim().length < 2) {
+    document.getElementById('resultBox').style.display = 'none';
+    clearBtn.style.display = 'none';
+    allDocsTitle.style.display = 'block';
+    allLinks.style.display = 'flex';
+    return;
+  }
+  clearBtn.style.display = 'flex';
+  allDocsTitle.style.display = 'none';
+  allLinks.style.display = 'none';
+  renderResult(search(query));
+}
+
+document.getElementById('searchInput').addEventListener('input', function() {
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  doSearch(this.value);
+});
+
+// ── RENDER ALL DOCS ────────────────────────────────────────────────────────
+function renderAllDocs() {
+  const docs = getDocsForModel(currentModel);
+  const cats = {};
+  for (const doc of docs) { if(!cats[doc.cat]) cats[doc.cat]=[]; cats[doc.cat].push(doc); }
+  let html = '';
+  for (const [cat, items] of Object.entries(cats)) {
+    html += `<div class="cat-group"><div class="cat-label">${cat}</div>`;
+    for (const doc of items) {
+      const fl = doc.links[0];
+      html += `<a class="doc-row" href="${fl.url}" target="_blank" rel="noopener">
+        <div class="doc-icon ${fl.icon}">${icons[fl.icon]||icons.web}</div>
+        <div class="doc-info">
+          <div class="doc-name">${doc.title}</div>
+          <div class="doc-sub">${doc.links.length > 1 ? doc.links.length+' liens' : fl.type}</div>
+        </div>
+        <span class="arrow-icon">›</span>
+      </a>`;
+    }
+    html += '</div>';
+  }
+  document.getElementById('allLinks').innerHTML = html;
+}
 </script>
 </body>
 </html>

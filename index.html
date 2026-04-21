@@ -36,7 +36,6 @@
       overflow: hidden;
     }
 
-    /* BG GRID */
     body::before {
       content: '';
       position: fixed;
@@ -48,7 +47,6 @@
       pointer-events: none;
     }
 
-    /* DIAGONAL ACCENT */
     body::after {
       content: '';
       position: fixed;
@@ -74,7 +72,6 @@
       to   { opacity:1; transform:translateY(0); }
     }
 
-    /* LOGO */
     .brand {
       text-align: center;
       margin-bottom: 36px;
@@ -110,7 +107,6 @@
       margin-top: 4px;
     }
 
-    /* CARD */
     .card {
       background: var(--card);
       border: 1.5px solid var(--border);
@@ -198,7 +194,6 @@
       to   { transform: translateX(100%); }
     }
 
-    /* ERROR */
     .error-box {
       display: none;
       margin-top: 14px;
@@ -211,7 +206,6 @@
       text-align: center;
     }
 
-    /* FOOTER */
     .foot {
       text-align: center;
       margin-top: 28px;
@@ -244,7 +238,7 @@
     <div class="field">
       <label>Mot de passe</label>
       <div class="pw-wrap">
-        <input type="password" id="userPwd" placeholder="••••••••" autocomplete="current-password" id="pwdInput">
+        <input type="password" id="userPwd" placeholder="••••••••" autocomplete="current-password">
         <button class="pw-toggle" onclick="togglePwd()" type="button" tabindex="-1">👁</button>
       </div>
     </div>
@@ -261,18 +255,15 @@
   const SALT = 'stark_salt_2025';
   const USERS_URL = 'users.json';
 
-  // SHA-256 via Web Crypto API
   async function sha256(str) {
     const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
   }
 
-  // Si déjà connecté → redirect direct
   window.addEventListener('DOMContentLoaded', () => {
     const sess = sessionStorage.getItem('stark_user');
     if (sess) { window.location.href = 'app.html'; }
 
-    // Enter key
     document.getElementById('userPwd').addEventListener('keydown', e => {
       if (e.key === 'Enter') doLogin();
     });
