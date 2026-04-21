@@ -1,0 +1,20 @@
+[
+  {
+    "id": "franck",
+    "password": "63827349bccd06c96fffa6eb2167ee75f8c81bc2f55902d6c7546deb0761c9eb",
+    "name": "Franck",
+    "role": "admin"
+  },
+  {
+    "id": "user2",
+    "password": "00b097d88daf6e08a760c4ff41f262603c004891879fd973915946dc91edf9da",
+    "name": "Utilisateur 2",
+    "role": "user"
+  },
+  {
+    "id": "user3",
+    "password": "54e421a2f22c049799af1cdf41ea9d56916788982c1715ccf0aba999411cfd79",
+    "name": "Utilisateur 3",
+    "role": "user"
+  }
+]

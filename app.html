@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="STARK DOCS">
+  <title>STARK VARG — Documentation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #E8150A;
+      --red-dim: #a00f07;
+      --black: #0a0a0a;
+      --dark: #111111;
+      --card: #181818;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --hit: #1e1e1e;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+    body { background:var(--black); color:var(--text); font-family:'Barlow',sans-serif; min-height:100vh; display:flex; flex-direction:column; }
+
+    /* HEADER */
+    header {
+      background: var(--dark);
+      border-bottom: 2px solid var(--red);
+      padding: 13px 16px 11px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .logo-badge {
+      width: 38px; height: 38px;
+      background: var(--red);
+      display: flex; align-items: center; justify-content: center;
+      clip-path: polygon(10% 0%, 90% 0%, 100% 10%, 100% 90%, 90% 100%, 10% 100%, 0% 90%, 0% 10%);
+      flex-shrink: 0;
+    }
+    .logo-badge svg { width: 20px; height: 20px; fill: white; }
+    .header-text { flex: 1; }
+    .header-text h1 { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:2px; line-height:1; color:#fff; }
+    .header-text p  { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:var(--muted); letter-spacing:1.5px; text-transform:uppercase; margin-top:1px; }
+    .user-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 20px; padding: 5px 12px 5px 8px;
+    }
+    .user-dot { width:7px; height:7px; background:var(--red); border-radius:50%; }
+    .user-name { font-family:'Barlow Condensed',sans-serif; font-size:12px; letter-spacing:1px; color:var(--muted); }
+    .btn-logout {
+      background: none; border: none;
+      color: var(--muted); font-size: 20px;
+      cursor: pointer; padding: 4px 6px;
+      line-height: 1;
+    }
+
+    /* SEARCH */
+    .search-section { padding: 18px 16px 10px; }
+    .search-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:9px; }
+    .search-wrap { display:flex; gap:8px; align-items:stretch; }
+    #searchInput {
+      flex:1; background:var(--card); border:1.5px solid var(--border);
+      border-radius:6px; padding:13px 16px;
+      font-family:'Barlow',sans-serif; font-size:16px; color:var(--text);
+      outline:none; transition:border-color .2s; -webkit-appearance:none;
+    }
+    #searchInput:focus { border-color:var(--red); }
+    #searchInput::placeholder { color:#555; }
+    #clearBtn { display:none; background:var(--border); border:none; border-radius:6px; padding:0 14px; color:var(--muted); font-size:18px; cursor:pointer; }
+
+    /* RESULT */
+    #resultBox { margin:10px 16px 4px; display:none; }
+    .result-card {
+      background:var(--hit); border:1.5px solid var(--red);
+      border-radius:8px; padding:14px 16px;
+      animation: slideIn .18s ease;
+    }
+    @keyframes slideIn { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+    .result-cat { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:3px; }
+    .result-title { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:1px; color:#fff; margin-bottom:5px; }
+    .result-desc { font-size:13px; color:#aaa; margin-bottom:12px; line-height:1.4; }
+    .result-links { display:flex; flex-direction:column; gap:8px; }
+    .result-link {
+      display:flex; align-items:center; gap:10px;
+      background:var(--black); border:1px solid var(--border);
+      border-radius:6px; padding:11px 14px;
+      color:var(--text); text-decoration:none; font-size:14px; font-weight:600;
+      transition:background .15s, border-color .15s;
+    }
+    .result-link:active { background:var(--red-dim); border-color:var(--red); }
+    .link-icon { width:28px; height:28px; background:var(--red); border-radius:4px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .link-icon svg { width:15px; height:15px; fill:white; }
+    .link-meta { display:flex; flex-direction:column; }
+    .link-name { font-size:14px; font-weight:700; color:#fff; }
+    .link-type { font-size:11px; color:var(--muted); font-weight:400; }
+    .no-result { background:var(--card); border:1.5px solid var(--border); border-radius:8px; padding:18px 16px; text-align:center; }
+    .no-result p { color:var(--muted); font-size:14px; }
+    .no-result strong { color:var(--red); }
+
+    /* CHIPS */
+    .section-title { font-family:'Barlow Condensed',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); padding:14px 16px 8px; }
+    .chips-wrap { padding:0 16px 10px; display:flex; flex-wrap:wrap; gap:8px; }
+    .chip {
+      background:var(--card); border:1px solid var(--border);
+      border-radius:20px; padding:7px 14px;
+      font-size:13px; font-family:'Barlow Condensed',sans-serif; letter-spacing:.5px;
+      color:var(--text); cursor:pointer;
+      transition:background .15s, border-color .15s, color .15s; user-select:none;
+    }
+    .chip:active, .chip.active { background:var(--red); border-color:var(--red); color:#fff; }
+
+    /* DOCS LIST */
+    .links-grid { padding:0 16px 40px; display:flex; flex-direction:column; gap:6px; }
+    .cat-group { margin-bottom:4px; }
+    .cat-label { font-family:'Barlow Condensed',sans-serif; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--red); margin-bottom:6px; padding-left:2px; }
+    .doc-row {
+      display:flex; align-items:center; gap:12px;
+      background:var(--card); border:1px solid var(--border);
+      border-radius:7px; padding:12px 14px;
+      text-decoration:none; color:var(--text);
+      transition:border-color .15s, background .15s; margin-bottom:6px;
+    }
+    .doc-row:active { border-color:var(--red); background:var(--hit); }
+    .doc-icon { width:34px; height:34px; background:var(--border); border-radius:5px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .doc-icon.pdf { background:#1a0800; }
+    .doc-icon.web { background:#00101a; }
+    .doc-icon.video { background:#0a001a; }
+    .doc-icon svg { width:18px; height:18px; fill:var(--red); }
+    .doc-icon.web svg { fill:#00aaff; }
+    .doc-icon.video svg { fill:#cc44ff; }
+    .doc-info { flex:1; min-width:0; }
+    .doc-name { font-size:14px; font-weight:600; color:#eee; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .doc-sub { font-size:11px; color:var(--muted); margin-top:1px; }
+    .arrow-icon { color:var(--muted); font-size:16px; }
+
+    footer { background:var(--dark); border-top:1px solid var(--border); text-align:center; padding:12px; font-size:11px; color:#333; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-badge">
+    <svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+  </div>
+  <div class="header-text">
+    <h1>STARK VARG EX</h1>
+    <p>Documentation</p>
+  </div>
+  <div class="user-badge">
+    <div class="user-dot"></div>
+    <span class="user-name" id="userName">—</span>
+  </div>
+  <button class="btn-logout" title="Déconnexion" onclick="logout()">⏻</button>
+</header>
+
+<div class="search-section">
+  <div class="search-label">🔍 Rechercher un sujet</div>
+  <div class="search-wrap">
+    <input type="search" id="searchInput" placeholder="ex: suspension, chaîne, batterie…" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button id="clearBtn" onclick="clearSearch()">✕</button>
+  </div>
+</div>
+
+<div id="resultBox"></div>
+
+<div class="section-title">Accès rapide</div>
+<div class="chips-wrap">
+  <span class="chip" onclick="quickSearch('suspension')">Suspension</span>
+  <span class="chip" onclick="quickSearch('chaîne')">Chaîne</span>
+  <span class="chip" onclick="quickSearch('batterie')">Batterie</span>
+  <span class="chip" onclick="quickSearch('manuel')">Manuel EX</span>
+  <span class="chip" onclick="quickSearch('troubleshoot')">Dépannage</span>
+  <span class="chip" onclick="quickSearch('assemblage')">Assemblage</span>
+  <span class="chip" onclick="quickSearch('pièces')">Pièces</span>
+  <span class="chip" onclick="quickSearch('faq')">FAQ</span>
+  <span class="chip" onclick="quickSearch('app')">App VARG</span>
+  <span class="chip" onclick="quickSearch('contact')">Contact</span>
+</div>
+
+<div class="section-title" id="allDocsTitle">Tous les documents</div>
+<div class="links-grid" id="allLinks"></div>
+
+<footer>STARK FUTURE — starkfuture.com</footer>
+
+<script>
+  // ── GUARD SESSION ──────────────────────────────
+  const raw = sessionStorage.getItem('stark_user');
+  if (!raw) { window.location.href = 'index.html'; }
+  else {
+    const user = JSON.parse(raw);
+    document.getElementById('userName').textContent = user.name.split(' ')[0].toUpperCase();
+  }
+
+  function logout() {
+    sessionStorage.removeItem('stark_user');
+    window.location.href = 'index.html';
+  }
+
+  // ── DOCS DATABASE ──────────────────────────────
+  const docs = [
+    {
+      id:'manuel-ex', cat:'Manuel',
+      title:'Manuel Propriétaire VARG EX',
+      desc:'Manuel complet du Stark VARG EX (PDF officiel 2025)',
+      tags:['manuel','owner','manual','propriétaire','guide','ex','varg ex','notice'],
+      links:[{ name:'Manuel EX — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark+VARG+EX+Owners+Manual+ENG+2025-02.pdf' }]
+    },
+    {
+      id:'manuel-mx12', cat:'Manuel',
+      title:'Manuel Propriétaire VARG MX 1.2',
+      desc:'Manuel complet du Stark VARG MX 1.2 (PDF officiel 2025)',
+      tags:['manuel mx','mx 1.2','mx1.2','motocross manual','mx manual'],
+      links:[{ name:'Manuel MX 1.2 — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark_VARG_MX_1_2_Owners_Manual_ENG_2025-08_Rev_2.pdf' }]
+    },
+    {
+      id:'manuel-sm', cat:'Manuel',
+      title:'Manuel Propriétaire VARG SM',
+      desc:'Manuel complet du Stark VARG SM (PDF officiel 2025)',
+      tags:['manuel sm','sm manual','supermoto','varg sm'],
+      links:[{ name:'Manuel SM — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Stark+VARG+SM+Owners+Manual+ENG+2025-11.pdf' }]
+    },
+    {
+      id:'manuel-mx10', cat:'Manuel',
+      title:'Manuel Propriétaire VARG MX 1.0',
+      desc:'Manuel original du Stark VARG MX (version 1.0)',
+      tags:['manuel mx 1.0','mx 1.0','varg original'],
+      links:[{ name:'Manuel MX 1.0 — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/varg_owners_manual.pdf' }]
+    },
+    {
+      id:'assemblage', cat:'Assemblage',
+      title:'Instructions d\'assemblage VARG',
+      desc:'Page officielle : déballage, montage et mise en route pour tous les modèles',
+      tags:['assemblage','assembly','montage','unboxing','déballage','mise en route','setup','installation'],
+      links:[
+        { name:'Instructions assemblage', type:'Page web', icon:'web', url:'https://starkfuture.com/manuals/assembly-instructions' },
+        { name:'Vidéo unboxing EX', type:'YouTube', icon:'video', url:'https://www.youtube.com/watch?v=nBx43Dxl2og' }
+      ]
+    },
+    {
+      id:'suspension', cat:'Technique',
+      title:'Réglage Suspension',
+      desc:'Tutoriels et guides techniques de réglage (SAG, compression, détente, ressort)',
+      tags:['suspension','sag','fourche','amortisseur','réglage','fork','shock','damper','ressort','spring','détente','compression','rebound','clicker'],
+      links:[
+        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+        { name:'Chaîne YouTube Stark', type:'YouTube', icon:'video', url:'https://www.youtube.com/@starkfutureofficial' }
+      ]
+    },
+    {
+      id:'chaine', cat:'Technique',
+      title:'Chaîne & Transmission',
+      desc:'Remplacement chaîne, réglage tension, pignons, couronne (520 pitch)',
+      tags:['chaîne','chain','pignon','couronne','sprocket','transmission','tension','remplacement','replace','520','couronne 49','couronne 51','pitch'],
+      links:[
+        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+        { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' }
+      ]
+    },
+    {
+      id:'batterie', cat:'Électrique',
+      title:'Batterie & Chargement',
+      desc:'Informations sur la batterie, chargeur, cycles de charge et autonomie',
+      tags:['batterie','battery','chargeur','charger','charge','charging','autonomie','range','capacité','wh','cycle','led','indicator'],
+      links:[
+        { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+        { name:'Dépannage — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Troubleshooting_FAQ_EN.pdf' }
+      ]
+    },
+    {
+      id:'depannage', cat:'Support',
+      title:'Dépannage & Troubleshooting',
+      desc:'Guide de résolution de pannes : LED, charge, démarrage, erreurs',
+      tags:['dépannage','troubleshoot','troubleshooting','panne','erreur','error','led','problème','problem','ne démarre pas','ne charge pas'],
+      links:[
+        { name:'Dépannage — PDF', type:'PDF', icon:'pdf', url:'https://assets.starkfuture.com/technical-documents/Troubleshooting_FAQ_EN.pdf' },
+        { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' }
+      ]
+    },
+    {
+      id:'led', cat:'Technique',
+      title:'LED & Interrupteur de commande',
+      desc:'Guide des voyants LED et du sélecteur de modes du guidon',
+      tags:['led','interrupteur','switch','control switch','voyant','mode','indicator','lumière','bouton'],
+      links:[
+        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' },
+        { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' }
+      ]
+    },
+    {
+      id:'app', cat:'App',
+      title:'Application VARG',
+      desc:'Connectivité Bluetooth, réglages, personnalisation et métriques via l\'app',
+      tags:['app','application','bluetooth','phone','téléphone','connexion','connect','mapping','puissance','power','réglages app','settings'],
+      links:[
+        { name:'Support central', type:'Page web', icon:'web', url:'https://starkfuture.com/support' },
+        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
+      ]
+    },
+    {
+      id:'pieces', cat:'Pièces',
+      title:'Pièces & Accessoires',
+      desc:'Boutique officielle pièces détachées et accessoires Stark Future',
+      tags:['pièces','parts','accessoires','accessories','spare','détachées','achat','shop','boutique','commande'],
+      links:[{ name:'Pièces & Accessoires', type:'Page web', icon:'web', url:'https://starkfuture.com/parts-and-accessories/spare-parts' }]
+    },
+    {
+      id:'faq', cat:'Support',
+      title:'FAQ — Questions fréquentes',
+      desc:'Toutes les réponses aux questions les plus posées sur le VARG',
+      tags:['faq','questions','réponses','aide','help','sam','chatbot','livraison','garantie','warranty'],
+      links:[
+        { name:'FAQ officielle', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+        { name:'SAM — Chatbot Stark', type:'Page web', icon:'web', url:'https://starkfuture.com/sam' }
+      ]
+    },
+    {
+      id:'contact', cat:'Support',
+      title:'Contact Support',
+      desc:'Contacter l\'équipe support Stark Future par email ou WhatsApp',
+      tags:['contact','support','email','whatsapp','aide','service','sav'],
+      links:[
+        { name:'Contact Stark Future', type:'Page web', icon:'web', url:'https://starkfuture.com/contact' },
+        { name:'WhatsApp Support', type:'WhatsApp', icon:'web', url:'https://api.whatsapp.com/send?phone=17173842982' }
+      ]
+    },
+    {
+      id:'entretien', cat:'Entretien',
+      title:'Entretien & Maintenance',
+      desc:'Nettoyage, maintenance périodique et service du VARG',
+      tags:['entretien','maintenance','service','nettoyage','cleaning','lavage','wash','révision','graisse','lube'],
+      links:[
+        { name:'FAQ — Entretien', type:'Page web', icon:'web', url:'https://starkfuture.com/faq' },
+        { name:'Tutoriels & Technique', type:'Page web', icon:'web', url:'https://starkfuture.com/tutorials-and-technical' }
+      ]
+    }
+  ];
+
+  const icons = {
+    pdf:   `<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zm-1 2l5 5h-5V4zM9 13h6v1H9v-1zm0 3h4v1H9v-1zm0-6h2v1H9v-1z"/></svg>`,
+    web:   `<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm-1 17.9A8 8 0 0 1 4.1 13H7a14.6 14.6 0 0 0 4 6.9zM4.1 11A8 8 0 0 1 11 4.1V7a14.6 14.6 0 0 0-4 4H4.1zM13 4.1A8 8 0 0 1 19.9 11H17a14.6 14.6 0 0 0-4-4V4.1zm0 15.8V17a14.6 14.6 0 0 0 4-6h2.9A8 8 0 0 1 13 19.9z"/></svg>`,
+    video: `<svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm11.56-7.83c-.21-.8-.83-1.43-1.63-1.63C18.37 5 12 5 12 5s-6.37 0-7.93.54c-.8.2-1.42.83-1.63 1.63A28.2 28.2 0 0 0 2 12a28.2 28.2 0 0 0 .44 4.83c.21.8.83 1.42 1.63 1.63C5.63 19 12 19 12 19s6.37 0 7.93-.54c.8-.21 1.42-.83 1.63-1.63A28.2 28.2 0 0 0 22 12a28.2 28.2 0 0 0-.44-4.83z"/></svg>`
+  };
+
+  function normalize(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/['']/g,"'");
+  }
+
+  function search(q) {
+    if (!q || q.trim().length < 2) return null;
+    const words = normalize(q.trim()).split(/\s+/);
+    let best = null, bestScore = 0;
+    for (const doc of docs) {
+      let score = 0;
+      const allTags = doc.tags.map(normalize);
+      const titleN = normalize(doc.title);
+      for (const w of words) {
+        if (titleN.includes(w)) score += 3;
+        for (const t of allTags) {
+          if (t === w) score += 4;
+          else if (t.includes(w) || w.includes(t)) score += 2;
+        }
+      }
+      if (score > bestScore) { bestScore = score; best = doc; }
+    }
+    return bestScore > 0 ? best : null;
+  }
+
+  function renderResult(doc) {
+    const box = document.getElementById('resultBox');
+    if (!doc) {
+      box.style.display = 'block';
+      box.innerHTML = `<div class="no-result"><p>Aucun résultat pour <strong>"${document.getElementById('searchInput').value}"</strong><br><br>Essayez : suspension, chaîne, batterie, manuel, dépannage…</p></div>`;
+      return;
+    }
+    const linksHtml = doc.links.map(l => `
+      <a class="result-link" href="${l.url}" target="_blank" rel="noopener">
+        <div class="link-icon">${icons[l.icon]||icons.web}</div>
+        <div class="link-meta">
+          <span class="link-name">${l.name}</span>
+          <span class="link-type">${l.type}</span>
+        </div>
+      </a>`).join('');
+    box.style.display = 'block';
+    box.innerHTML = `
+      <div class="result-card">
+        <div class="result-cat">${doc.cat}</div>
+        <div class="result-title">${doc.title}</div>
+        <div class="result-desc">${doc.desc}</div>
+        <div class="result-links">${linksHtml}</div>
+      </div>`;
+  }
+
+  function clearSearch() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('resultBox').style.display = 'none';
+    document.getElementById('clearBtn').style.display = 'none';
+    document.getElementById('allDocsTitle').style.display = 'block';
+    document.getElementById('allLinks').style.display = 'flex';
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    document.getElementById('searchInput').focus();
+  }
+
+  function quickSearch(kw) {
+    document.getElementById('searchInput').value = kw;
+    document.querySelectorAll('.chip').forEach(c => {
+      c.classList.toggle('active', normalize(c.textContent).includes(normalize(kw)) || normalize(kw).includes(normalize(c.textContent)));
+    });
+    doSearch(kw);
+  }
+
+  function doSearch(query) {
+    const clearBtn = document.getElementById('clearBtn');
+    const allDocsTitle = document.getElementById('allDocsTitle');
+    const allLinks = document.getElementById('allLinks');
+    if (!query || query.trim().length < 2) {
+      document.getElementById('resultBox').style.display = 'none';
+      clearBtn.style.display = 'none';
+      allDocsTitle.style.display = 'block';
+      allLinks.style.display = 'flex';
+      return;
+    }
+    clearBtn.style.display = 'flex';
+    allDocsTitle.style.display = 'none';
+    allLinks.style.display = 'none';
+    renderResult(search(query));
+  }
+
+  document.getElementById('searchInput').addEventListener('input', function() {
+    document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    doSearch(this.value);
+  });
+
+  // RENDER ALL DOCS
+  function renderAllDocs() {
+    const cats = {};
+    for (const doc of docs) { if(!cats[doc.cat]) cats[doc.cat]=[]; cats[doc.cat].push(doc); }
+    let html = '';
+    for (const [cat, items] of Object.entries(cats)) {
+      html += `<div class="cat-group"><div class="cat-label">${cat}</div>`;
+      for (const doc of items) {
+        const fl = doc.links[0];
+        html += `<a class="doc-row" href="${fl.url}" target="_blank" rel="noopener">
+          <div class="doc-icon ${fl.icon}">${icons[fl.icon]||icons.web}</div>
+          <div class="doc-info">
+            <div class="doc-name">${doc.title}</div>
+            <div class="doc-sub">${doc.links.length > 1 ? doc.links.length+' liens' : fl.type}</div>
+          </div>
+          <span class="arrow-icon">›</span>
+        </a>`;
+      }
+      html += '</div>';
+    }
+    document.getElementById('allLinks').innerHTML = html;
+  }
+
+  renderAllDocs();
+</script>
+</body>
+</html>
